@@ -1,3 +1,5 @@
+package bddmacotas;
+
 
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
@@ -45,7 +47,7 @@ public class VerMascota extends javax.swing.JFrame {
     public VerMascota(String datosm) throws IOException, SQLException {
         initComponents();
         textoayuda.setText("<html>Si se recuperó la mascota,<br>  ingresa la cédula de quien <br> la fue a buscar y haz click aquí :</html>");
-        String[] lista = datosm.split(", ");
+        String[] lista = datosm.split(",");
         nrochip.setText(lista[0]);
         datos.setText(lista[1]);
         desc.setText(lista[2]);
@@ -67,7 +69,7 @@ public class VerMascota extends javax.swing.JFrame {
         while(rs.next()){
             resultado.add(rs.getString(1));
         }
-;
+
         raza.setText(resultado.get(idraza1).toString());
     }
     /**
@@ -82,14 +84,13 @@ public class VerMascota extends javax.swing.JFrame {
             if (!con.isClosed()){
                 System.out.println("Successfully connected to MySQL server using TCP/IP...");
             } 
-            PreparedStatement ps2 = con.prepareStatement("SELECT idimagen FROM imagen WHERE idmascota = "+nrochip.getText());
+            PreparedStatement ps2 = con.prepareStatement("SELECT imagen FROM imagen WHERE idmascota = "+nrochip.getText());
             ResultSet rs = ps2.executeQuery();
             //boolean hayFoto= rs.next();
             while(rs.next()){
-                byte[] blob= rs.getBytes(1);
+                String blob= rs.getString(1);
+       //         System.out.println(new File(blob).getAbsolutePath());
                 if (blob!=null){
-                    BufferedImage img = null;
-                    img= ImageIO.read(new ByteArrayInputStream(blob));
                     foto.setIcon(new ImageIcon(blob));
                 }else{
                     foto.setIcon(new ImageIcon("src/imagenes/catdog.png"));

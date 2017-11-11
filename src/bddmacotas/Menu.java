@@ -1,3 +1,5 @@
+package bddmacotas;
+
 
 import java.sql.SQLException;
 import java.util.logging.Level;
@@ -132,19 +134,11 @@ public class Menu extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void bIngresoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bIngresoActionPerformed
-        try {
-            new IngresoMascota().setVisible(true);
-        } catch (SQLException ex) {
-            Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        new IngresoMascota().setVisible(true);
     }//GEN-LAST:event_bIngresoActionPerformed
 
     private void bdenunciaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bdenunciaActionPerformed
-        try {
-            new Denuncia().setVisible(true);
-        } catch (SQLException ex) {
-            Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        new Denuncia().setVisible(true);
     }//GEN-LAST:event_bdenunciaActionPerformed
 
     private void bbuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bbuscarActionPerformed

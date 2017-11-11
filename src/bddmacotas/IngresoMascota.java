@@ -3,6 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+import bddmacotas.SubirImagen;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -60,7 +61,15 @@ public class IngresoMascota extends javax.swing.JFrame {
     public boolean chequeoDatos(){
         boolean respuesta = true;
         limpiarErrores();
-        try {      
+        try {
+            if("".equals(cidueño.getText()) && "".equals(nombre.getText()) && "".equals(rutvet.getText())){
+                JOptionPane.showMessageDialog(null, "Datos invalidos.");
+                respuesta= false;
+            }
+            if(!isNumeric(cidueño.getText()) && !isNumeric(rutvet.getText()) ){
+                JOptionPane.showMessageDialog(null, "CI, RUT deben ser numericos");
+                respuesta=false;
+            }
             ResultSet rs = bdd.enviarConsulta("SELECT ci FROM Persona WHERE ci="+cidueño.getText());
             if (!rs.next()) {
                 lerrorci.setText("Ese usuario no está en el sistema");
@@ -78,15 +87,21 @@ public class IngresoMascota extends javax.swing.JFrame {
             if( raza.getSelectedIndex() == (-1)){
                 JOptionPane.showMessageDialog(null, "Debe una raza.");
                 respuesta= false;
-            }            
+            }          
         } catch (SQLException ex) {
             Logger.getLogger(IngresoMascota.class.getName()).log(Level.SEVERE, null, ex);
-        }catch(NullPointerException e){
-            JOptionPane.showMessageDialog(null, "Datos invalidos.");
         }
             
         return respuesta;
     } 
+    public static boolean isNumeric(String cadena){
+	try {
+		Integer.parseInt(cadena);
+		return true;
+	} catch (NumberFormatException nfe){
+		return false;
+	}
+    }
     
     /**
      *
@@ -174,7 +189,7 @@ private void llenarComboBoxes2() throws SQLException{
             }
         });
         Fondo.add(insertar);
-        insertar.setBounds(150, 310, 129, 23);
+        insertar.setBounds(150, 310, 117, 23);
 
         listar.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 11)); // NOI18N
         listar.setText("Listar Mascotas");
@@ -193,7 +208,7 @@ private void llenarComboBoxes2() throws SQLException{
             }
         });
         Fondo.add(nombre);
-        nombre.setBounds(140, 50, 200, 20);
+        nombre.setBounds(140, 50, 200, 21);
 
         descripcion.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 11)); // NOI18N
         descripcion.setHorizontalAlignment(javax.swing.JTextField.LEFT);
@@ -227,48 +242,48 @@ private void llenarComboBoxes2() throws SQLException{
             }
         });
         Fondo.add(cidueño);
-        cidueño.setBounds(140, 200, 200, 20);
+        cidueño.setBounds(140, 200, 200, 21);
 
         lnombre.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 11)); // NOI18N
         lnombre.setForeground(new java.awt.Color(0, 78, 150));
         lnombre.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         lnombre.setText("Nombre");
         Fondo.add(lnombre);
-        lnombre.setBounds(52, 54, 78, 14);
+        lnombre.setBounds(52, 54, 78, 15);
 
         ldescripcion.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 11)); // NOI18N
         ldescripcion.setForeground(new java.awt.Color(0, 78, 150));
         ldescripcion.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         ldescripcion.setText("Descripción");
         Fondo.add(ldescripcion);
-        ldescripcion.setBounds(50, 150, 78, 14);
+        ldescripcion.setBounds(50, 150, 78, 15);
 
         lfechanac.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 11)); // NOI18N
         lfechanac.setForeground(new java.awt.Color(0, 78, 150));
         lfechanac.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         lfechanac.setText("Fecha Nacimiento");
         Fondo.add(lfechanac);
-        lfechanac.setBounds(10, 110, 120, 14);
+        lfechanac.setBounds(10, 110, 120, 15);
 
         jLabel1.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 11)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(0, 78, 150));
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel1.setText("RUT Veterinaria");
         Fondo.add(jLabel1);
-        jLabel1.setBounds(40, 240, 94, 14);
+        jLabel1.setBounds(40, 240, 94, 15);
 
         lcidueño.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 11)); // NOI18N
         lcidueño.setForeground(new java.awt.Color(0, 78, 150));
         lcidueño.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         lcidueño.setText("CI Dueño");
         Fondo.add(lcidueño);
-        lcidueño.setBounds(70, 200, 60, 14);
+        lcidueño.setBounds(70, 200, 60, 15);
 
         Titulo.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 24)); // NOI18N
         Titulo.setForeground(new java.awt.Color(0, 78, 150));
         Titulo.setText("Ingresar Mascota");
         Fondo.add(Titulo);
-        Titulo.setBounds(134, 11, 206, 29);
+        Titulo.setBounds(134, 11, 184, 32);
 
         lerrorci.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 11)); // NOI18N
         lerrorci.setForeground(new java.awt.Color(255, 0, 0));
@@ -290,7 +305,7 @@ private void llenarComboBoxes2() throws SQLException{
             }
         });
         Fondo.add(tipoAnimal);
-        tipoAnimal.setBounds(140, 80, 79, 20);
+        tipoAnimal.setBounds(140, 80, 79, 21);
 
         raza.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 11)); // NOI18N
         raza.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Maltes", "Dalmata", "Cocker", "Caninche", "Husky", "No Definida" }));
@@ -300,12 +315,12 @@ private void llenarComboBoxes2() throws SQLException{
             }
         });
         Fondo.add(raza);
-        raza.setBounds(220, 80, 150, 20);
+        raza.setBounds(220, 80, 150, 21);
 
         agregarImagen.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 11)); // NOI18N
         agregarImagen.setText("Quiere agregar foto de la mascota?");
         Fondo.add(agregarImagen);
-        agregarImagen.setBounds(130, 280, 223, 23);
+        agregarImagen.setBounds(130, 280, 197, 23);
 
         lFondo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/FondoMasc.jpg"))); // NOI18N
         lFondo.setText("   ");

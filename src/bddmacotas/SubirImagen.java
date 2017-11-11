@@ -1,7 +1,10 @@
+package bddmacotas;
+
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -11,6 +14,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
+import static jdk.nashorn.internal.objects.NativeRegExp.source;
 
 
 /**
@@ -80,7 +84,7 @@ public class SubirImagen extends javax.swing.JFrame {
         Titulo.setForeground(new java.awt.Color(0, 78, 150));
         Titulo.setText("Subir Foto de Mascota");
         Fondo.add(Titulo);
-        Titulo.setBounds(10, 20, 230, 21);
+        Titulo.setBounds(10, 20, 230, 24);
 
         idlabel.setText("     ");
         Fondo.add(idlabel);
@@ -89,7 +93,7 @@ public class SubirImagen extends javax.swing.JFrame {
         lIDMascota.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 11)); // NOI18N
         lIDMascota.setText("ID Mascota:");
         Fondo.add(lIDMascota);
-        lIDMascota.setBounds(220, 300, 70, 14);
+        lIDMascota.setBounds(220, 300, 70, 15);
 
         listo.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         listo.setForeground(new java.awt.Color(0, 255, 51));
@@ -133,21 +137,20 @@ public class SubirImagen extends javax.swing.JFrame {
             }
 
             File file = fc.getSelectedFile();
-            FileInputStream fis = new FileInputStream(file);
-            PreparedStatement ps = con.prepareStatement("INSERT INTO imagen VALUES ("+idMascota+", ?)");
-            ps.setBinaryStream(1, fis, (int)file.length());
+            String path=file.getName();
+            File archivo1 = new File(path);
+            File archivo2= new File("C:\\Users\\Karen\\Documents\\NetBeansProjects\\BDDPersona\\"+path);
+            Files.copy(file.toPath(), archivo1.toPath());
+            Files.copy(file.toPath(), archivo2.toPath());
+            PreparedStatement ps = con.prepareStatement("INSERT INTO imagen (idmascota,imagen) VALUES ("+idMascota+",'"+ path+ "')");
             ps.executeUpdate();
             ps.close();
-            PreparedStatement ps2 = con.prepareStatement("SELECT imagen FROM imagen WHERE id = "+idMascota);
-            //ps.setString(2, "perro.jpg");
-            ResultSet rs = ps2.executeQuery();
-            while (rs.next()) {
-                byte[] imgBytes = rs.getBytes(1);
-                imagen1.setIcon(new ImageIcon(imgBytes));
+            PreparedStatement ps2 = con.prepareStatement("select imagen from imagen where idmascota="+ idMascota);
+            ResultSet rs2= ps2.executeQuery();
+            while(rs2.next()){
+                String imagen= rs2.getString(1);
+                imagen1.setIcon(new ImageIcon(imagen));
             }
-            ps2.close();
-            rs.close();
-            fis.close();
             listo.setText("Foto agregada correctamente");
             subir.setVisible(false);
         } catch (IOException ex) {

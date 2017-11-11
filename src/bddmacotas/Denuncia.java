@@ -65,7 +65,23 @@ public class Denuncia extends javax.swing.JFrame {
     public boolean chequeoDatos(){
         boolean respuesta = true;
         limpiarErrores();
-        try {      
+        try { 
+            if("".equals(cidenunciante.getText()) && "".equals(idmascota.getText()) && "".equals(zona.getText())){
+                JOptionPane.showMessageDialog(null, "Datos invalidos.");
+                respuesta=false;
+            }
+            if(!isNumeric(cidenunciante.getText())){
+                lerrorci.setText("CI debe contener solo numeros.");
+                respuesta=false;
+            }
+            if(!isNumeric(rutvet.getText())){
+                lerrorvet.setText("RUT debe contener solo numeros.");
+                respuesta=false;
+            }
+            if(!isNumeric(idmascota.getText())){
+                lerrormascota.setText("ID debe contener solo numeros.");
+                respuesta=false;
+            }
             ResultSet rs = bdd.enviarConsulta("SELECT ci FROM Persona WHERE ci="+cidenunciante.getText());
             if (!rs.next()) {
                 lerrorci.setText("Ese usuario no está en el sistema");
@@ -83,6 +99,11 @@ public class Denuncia extends javax.swing.JFrame {
             } 
             if(!isNumeric(zona.getText())){
                 lerrorzona.setText("La zona debe contener solo numeros.");
+                respuesta=false;
+            }
+            if(tipoDenuncia.getSelectedIndex() == (-1)){
+                JOptionPane.showMessageDialog(null, "Debe ingresar el tipo de denuncia.");
+                respuesta= false;
             }
         } catch (SQLException ex) {
             Logger.getLogger(IngresoMascota.class.getName()).log(Level.SEVERE, null, ex);

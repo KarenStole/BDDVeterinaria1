@@ -1,3 +1,5 @@
+package bddmacotas;
+
 
 import java.io.IOException;
 import java.sql.ResultSet;
@@ -44,12 +46,13 @@ public class BuscarMascota extends javax.swing.JFrame {
             listModel.clear();
             String res="";
             while (rs.next()) {
-                    res = rs.getString(1)+ ", " 
-                          +rs.getString(2);
+                    res = rs.getString(1)+ "," 
+                          +rs.getString(2)+ ","
+                            + rs.getString(3)+","
+                          +rs.getString(4);
                     listModel.addElement(res);
-                    res+= ", "+rs.getString(3)+ ", "
-                          +rs.getString(4)+ ", "
-                          +rs.getString(5)+ ", "
+                    res+= ","
+                          +rs.getString(5)+ ","
                           +rs.getString(6);
                     a.add(res);
 //                a.add("No se encontraron mascotas");
@@ -98,7 +101,7 @@ private void llenarComboBoxes2() throws SQLException{
      */
     public boolean chequearCI(){
         boolean resultado = true;
-        if (cedula.getText().compareTo("")!=0){
+        if (cedula.getText().compareTo("")!=0 && isNumeric(cedula.getText())){
             try {
                 errorci.setText("");
                 ResultSet rs = bdd.enviarConsulta("SELECT * FROM persona where ci="+cedula.getText());
@@ -111,10 +114,34 @@ private void llenarComboBoxes2() throws SQLException{
             }
             
         }else{
-            errorci.setText("La cédula no puede ser vacía");
+            errorci.setText("CI invalida");
             resultado = false;
         }
         return resultado;
+    }
+    public boolean chequeoBusqueda(){
+        boolean respuesta=true;
+         if( tipoAnimal.getSelectedIndex() == (-1)){
+                JOptionPane.showMessageDialog(null, "Debe ingresar que animal es.");
+                respuesta= false;
+            }
+        if( raza.getSelectedIndex() == (-1)){
+                JOptionPane.showMessageDialog(null, "Debe una raza.");
+                respuesta= false;
+            } 
+        if("".equals(zona.getText()) && !isNumeric(zona.getText())){
+            JOptionPane.showMessageDialog(null, "Zona invalida");
+            respuesta=false;
+        }
+        return respuesta;
+    }
+    public static boolean isNumeric(String cadena){
+	try {
+		Integer.parseInt(cadena);
+		return true;
+	} catch (NumberFormatException nfe){
+		return false;
+	}
     }
     /**
      * This method is called from within the constructor to initialize the form.
@@ -239,6 +266,11 @@ private void llenarComboBoxes2() throws SQLException{
         });
 
         raza.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 11)); // NOI18N
+        raza.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                razaActionPerformed(evt);
+            }
+        });
 
         buscarf.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 11)); // NOI18N
         buscarf.setText("Buscar");
@@ -351,26 +383,36 @@ private void llenarComboBoxes2() throws SQLException{
      * @param evt 
      */
     private void buscarfActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buscarfActionPerformed
-        int razas = (tipoAnimal.getSelectedIndex()*6)+(raza.getSelectedIndex()); //TODO ARREGLAR ESTO
-        ResultSet rs = bdd.enviarConsulta("select * from mascota where idmascota in "
-            + "(select id_mascota from denuncia where zona = "+zona.getText()+" and fecharesolucion is null) "
-            + "and id_raza = " + razas);
-        imprimirResultados(rs);
+        if (chequeoBusqueda()){
+            int razas = (tipoAnimal.getSelectedIndex()*6)+(raza.getSelectedIndex());
+            ResultSet rs = bdd.enviarConsulta("select * from mascota where idmascota in "
+                + "(select id_mascota from denuncia where zona = "+zona.getText()+" and fecharesolucion is null) "
+                + "and id_raza = " + razas);
+            imprimirResultados(rs);
+        }
     }//GEN-LAST:event_buscarfActionPerformed
 
     private void bverMascActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bverMascActionPerformed
             System.out.println(listaci.getSelectedIndex());
             System.out.println(a.get(listaci.getSelectedIndex()));
         try {
-            new VerMascota(a.get(listaci.getSelectedIndex())).setVisible(true);
-        } catch (IOException ex) {
-            Logger.getLogger(BuscarMascota.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SQLException ex) {
-            Logger.getLogger(BuscarMascota.class.getName()).log(Level.SEVERE, null, ex);
+                try {
+                    new VerMascota(a.get(listaci.getSelectedIndex())).setVisible(true);
+                } catch (IOException ex) {
+                    Logger.getLogger(BuscarMascota.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (SQLException ex) {
+                    Logger.getLogger(BuscarMascota.class.getName()).log(Level.SEVERE, null, ex);
+                }
+        }  catch (ArrayIndexOutOfBoundsException ex) {
+            JOptionPane.showMessageDialog(null, "No se ha seleccionado nada.");
         }
 
 
     }//GEN-LAST:event_bverMascActionPerformed
+
+    private void razaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_razaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_razaActionPerformed
 
     /**
      *
