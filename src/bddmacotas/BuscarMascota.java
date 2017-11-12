@@ -37,29 +37,49 @@ public class BuscarMascota extends javax.swing.JFrame {
         llenarComboBoxes2();
         listaci.setModel(listModel);
     }
-    
+/**
+ * Metodo encargado de extraer en nombre de tipodenuncia, dada una mascota que se le hizo la 
+ * denuncia.
+ * @param id
+ * @return
+ * @throws SQLException 
+ */
+    public String mostrarTipoDenuncia(String id) throws SQLException{
+        String res="";
+        ResultSet rs= bdd.enviarConsulta("SELECT DESCRIPCION FROM TIPODENUNCIA WHERE TIPODENUNCIA.IDDENUNCIA IN ("
+                + "SELECT tipo_DENUNCIA FROM DENUNCIA WHERE denuncia.ID_MASCOTA="+id+")");
+        while(rs.next()){
+            res+= rs.getString(1);
+        }
+        return res;
+    }
     /**
      * Metodo encargado de imprimir los resultados de las consultas a la base de datos.
      * Dichos datos son idmascota,nombre, descripcion, tipodenuncia
      * Ademas se guardan en un array para posterior uso en VerMascota
      * @param rs 
      */
-    public void imprimirResultados(ResultSet rs){
+    public void imprimirResultados(ResultSet rs) throws SQLException{
         try {
             a.clear();
             listModel.clear();
             String res="";
-            while (rs.next()) {
-                    res = rs.getString(1)+ "," 
-                          +rs.getString(2)+ ","
-                            + rs.getString(3)+","
-                          +rs.getString(4);
-                    listModel.addElement(res);
-                    res+= ","
+            String shownRes="";
+            if (rs!=null){
+                while (rs.next()) {
+                    shownRes += rs.getString(1)+ "," 
+                          +rs.getString(2)+","+ mostrarTipoDenuncia(rs.getString(1));
+                    listModel.addElement(shownRes);
+                    shownRes="";
+                    res+= rs.getString(1)+ "," 
+                          +rs.getString(2)+","
+                          + rs.getString(3)+ ","
+                          +rs.getString(4)+","
                           +rs.getString(5)+ ","
                           +rs.getString(6);
                     a.add(res);
-//                a.add("No se encontraron mascotas");
+                    res="";
+                }
             }
         } catch (SQLException ex) {
             Logger.getLogger(IngresoMascota.class.getName()).log(Level.SEVERE, null, ex);
@@ -385,7 +405,11 @@ private void llenarComboBoxes2() throws SQLException{
                     + "(select id_mascota from denuncia where id_mascota in "
                     + "(select id_mascota from dueniomascota where ci_dueño = "+cedula.getText()+") "
                     + "and fecharesolucion is null)");
-            imprimirResultados(rs);
+            try {
+                imprimirResultados(rs);
+            } catch (SQLException ex) {
+                Logger.getLogger(BuscarMascota.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }//GEN-LAST:event_bbuscarActionPerformed
 
@@ -412,13 +436,16 @@ private void llenarComboBoxes2() throws SQLException{
             ResultSet rs = bdd.enviarConsulta("select * from mascota where idmascota in "
                 + "(select id_mascota from denuncia where zona = "+zona.getText()+" and fecharesolucion is null) "
                 + "and id_raza = " + razas);
-            imprimirResultados(rs);
+            try {
+                imprimirResultados(rs);
+            } catch (SQLException ex) {
+                Logger.getLogger(BuscarMascota.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }//GEN-LAST:event_buscarfActionPerformed
 
     private void bverMascActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bverMascActionPerformed
-            System.out.println(listaci.getSelectedIndex());
-            System.out.println(a.get(listaci.getSelectedIndex()));
+
         try {
                 try {
                     new VerMascota(a.get(listaci.getSelectedIndex())).setVisible(true);

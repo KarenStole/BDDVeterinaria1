@@ -67,31 +67,39 @@ public class IngresoMascota extends javax.swing.JFrame {
             if("".equals(cidueño.getText()) && "".equals(nombre.getText()) && "".equals(rutvet.getText())){
                 JOptionPane.showMessageDialog(null, "Datos invalidos.");
                 respuesta= false;
+                return respuesta;
             }
             if(!isNumeric(cidueño.getText()) && !isNumeric(rutvet.getText()) ){
                 JOptionPane.showMessageDialog(null, "CI, RUT deben ser numericos");
                 respuesta=false;
+                return respuesta;
             }
             ResultSet rs = bdd.enviarConsulta("SELECT ci FROM Persona WHERE ci="+cidueño.getText());
             if (!rs.next()) {
                 lerrorci.setText("Ese usuario no está en el sistema");
                 respuesta = false;
+                return respuesta;
             }
             rs = bdd.enviarConsulta("SELECT rut FROM Veterinaria WHERE rut="+rutvet.getText());
             if (!rs.next()) {
                 lerrorvet.setText("No existe una veterinaria con ese RUT");
                 respuesta = false;
+                return respuesta;
             } 
             if( tipoAnimal.getSelectedIndex() == (-1)){
                 JOptionPane.showMessageDialog(null, "Debe ingresar que animal es.");
                 respuesta= false;
+                return respuesta;
             }
             if( raza.getSelectedIndex() == (-1)){
                 JOptionPane.showMessageDialog(null, "Debe una raza.");
                 respuesta= false;
+                return respuesta;
             }          
         } catch (SQLException ex) {
             Logger.getLogger(IngresoMascota.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (NullPointerException ex){
+            JOptionPane.showMessageDialog(null, "Datos invalidos");
         }
             
         return respuesta;
@@ -234,7 +242,6 @@ private void llenarComboBoxes2() throws SQLException{
             ex.printStackTrace();
         }
         fechanac.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        fechanac.setText("01/01/2017");
         fechanac.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 11)); // NOI18N
         fechanac.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -390,6 +397,11 @@ private void llenarComboBoxes2() throws SQLException{
                     System.out.println("Creando la ventana con el id: "+ idMascota);
                     new SubirImagen(idMascota).setVisible(true);
                 }
+                nombre.setText("");
+                descripcion.setText("");
+                cidueño.setText("");
+                rutvet.setText("");
+                JOptionPane.showMessageDialog(null, "Datos ingresados con exito.");
             } catch (SQLException ex) {
                 Logger.getLogger(IngresoMascota.class.getName()).log(Level.SEVERE, null, ex);
             }
