@@ -1,3 +1,5 @@
+package bddmacotas;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -12,9 +14,14 @@ import java.util.Scanner;
 public class BaseDeDatos1 {    
 
     /**
-     * Metodo encargado de enviar una consulta pasada por parametro a la base de datos.
+     * Metodo encargado de enviar una consulta SQL a una base de datos.
+     * Realiza la conexion a la base de datos dada y luego ejectura 
+     * la consulta.
+     * **NOTA** 
+     *   Se deben poner los correctos parametros en "con = DriverManager.getConnection("jdbc:postgresql://192.168.56.56:5432/Mascotas","postgres","people098");"
+     *  IP_PUERTO,nombre de la base de datos, usuario de PostgreSQL y contraseña.
      * @param consulta
-     * @return resultado de la consulta
+     * @return resultado de la consulta. Null si la conexion fallo.
      */
 public ResultSet enviarConsulta(String consulta) {
     Connection con = null;

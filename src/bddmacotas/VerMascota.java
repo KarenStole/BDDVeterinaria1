@@ -41,8 +41,11 @@ public class VerMascota extends javax.swing.JFrame {
     }
 
     /**
-     *
+     * Una vez invocada esta pantalla, se presentan todos los datos de la mascota pasada por
+     * parametro, asi como tambien su foto.
      * @param datosm
+     * @throws IOException
+     * @throws SQLException 
      */
     public VerMascota(String datosm) throws IOException, SQLException {
         initComponents();
@@ -57,10 +60,11 @@ public class VerMascota extends javax.swing.JFrame {
         subirfoto();
     }
     
-    /**
-     *
-     * @param idraza
-     */
+/**
+ * Metodo encargado de extraer el nombre de la raza de la mascota, pasando el id de la raza
+ * @param idraza
+ * @throws SQLException 
+ */
     public void agregarRaza(String idraza) throws SQLException{
         ArrayList resultado= new ArrayList();
         int idraza1 = Integer.parseInt(idraza);
@@ -72,9 +76,13 @@ public class VerMascota extends javax.swing.JFrame {
 
         raza.setText(resultado.get(idraza1).toString());
     }
-    /**
-     * Metodo encargado de mostrar la foto de la mascota en pantalla cuando se muestra la denuncia.
-     */
+ /**
+  * Metodo encargado de mostrar en pantalla la foto de la mascota.
+  * Dada el id de la mascota se busca su imagen correspondiente en la tabla de imagen, obteniendo la
+  * ruta relativa de esta que se encuentra en los archivos del programa, y se muestra en pantalla. En le caso de 
+  * no tener una imagen se muestra una por defecto.
+  * @throws IOException 
+  */ 
     public void subirfoto() throws IOException{
         try {
             Connection con = null;

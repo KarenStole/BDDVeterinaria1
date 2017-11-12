@@ -1,3 +1,5 @@
+package bddmacotas;
+
 import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -15,7 +17,9 @@ public class Denuncia extends javax.swing.JFrame {
     BaseDeDatos1 bdd = new BaseDeDatos1();
 
     /**
-     *
+     * Constructor encargado de establecer los valores iniciales a motrar en pantalla,
+     * como la fecha actual para la denuncia, y llenar combobos de tipo de denucnia
+     * invocando al metodo llenarComboBoxes2()
      */
     public Denuncia() throws SQLException {
         initComponents();
@@ -23,6 +27,10 @@ public class Denuncia extends javax.swing.JFrame {
         llenarComboBoxes2();
         System.out.println(fecha());
     }
+    /**
+ * Metodo encargado de obtener la fecha actual.
+ * @return fecha
+ */ 
     public String fecha(){
         Date now = new Date(System.currentTimeMillis());
         SimpleDateFormat date = new SimpleDateFormat("yyyy/MM/dd");
@@ -60,6 +68,12 @@ public class Denuncia extends javax.swing.JFrame {
     /**
      * Clase encargada de chequear que todos los datos necesarios para hacer una denuncia,
      * esten en la base de dato.
+     * Chequeos: cidenunciante no nulo, registrado en el sistema.
+     *           idmascota no nulo, numerico,registrado en el sistema y numerico.
+     *          zona no nula, y numerica.
+     *          Rut veterinario no nulo, registrado en el sistemam y numerico.
+     *          tipo denuncia elegida.
+     *          
      * @return True si es todo correcto, False si falta registrarse
      */
     public boolean chequeoDatos(){
@@ -130,6 +144,11 @@ public class Denuncia extends javax.swing.JFrame {
         lerrorvet.setText("     ");
         lerrorzona.setText("     ");
     }
+  /**
+     * Metodo encargado de llenar comboBox de tipo de denucia.
+     * Dicha informacion se extrae directamente de la tabla tipodenuncia de la base de datos.
+     * @throws SQLException 
+     */
 private void llenarComboBoxes2() throws SQLException{
         tipoDenuncia.removeAllItems();
         ArrayList tipoanimal= new ArrayList();
@@ -176,6 +195,7 @@ private void llenarComboBoxes2() throws SQLException{
         lerrorci = new javax.swing.JLabel();
         lerrorvet = new javax.swing.JLabel();
         lerrorzona = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
         lfondo = new javax.swing.JLabel();
 
         jList1.setModel(new javax.swing.AbstractListModel<String>() {
@@ -256,7 +276,7 @@ private void llenarComboBoxes2() throws SQLException{
         lfecha.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         lfecha.setText("Fecha Perdido");
         Fondo.add(lfecha);
-        lfecha.setBounds(370, 140, 100, 14);
+        lfecha.setBounds(370, 140, 100, 15);
 
         zona.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 11)); // NOI18N
         zona.addActionListener(new java.awt.event.ActionListener() {
@@ -265,7 +285,7 @@ private void llenarComboBoxes2() throws SQLException{
             }
         });
         Fondo.add(zona);
-        zona.setBounds(140, 230, 210, 20);
+        zona.setBounds(140, 230, 210, 21);
 
         idmascota.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 11)); // NOI18N
         Fondo.add(idmascota);
@@ -284,7 +304,7 @@ private void llenarComboBoxes2() throws SQLException{
         jScrollPane1.setViewportView(resultado);
 
         Fondo.add(jScrollPane1);
-        jScrollPane1.setBounds(20, 310, 620, 86);
+        jScrollPane1.setBounds(20, 310, 620, 96);
 
         listar.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 11)); // NOI18N
         listar.setText("Listar denuncias");
@@ -309,7 +329,7 @@ private void llenarComboBoxes2() throws SQLException{
             }
         });
         Fondo.add(tipoDenuncia);
-        tipoDenuncia.setBounds(140, 140, 210, 20);
+        tipoDenuncia.setBounds(140, 140, 210, 21);
 
         lerrormascota.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 11)); // NOI18N
         lerrormascota.setForeground(new java.awt.Color(255, 0, 0));
@@ -334,6 +354,11 @@ private void llenarComboBoxes2() throws SQLException{
         lerrorzona.setText("   ");
         Fondo.add(lerrorzona);
         lerrorzona.setBounds(134, 254, 220, 20);
+
+        jLabel1.setForeground(new java.awt.Color(0, 78, 150));
+        jLabel1.setText("Tipo de denuncia");
+        Fondo.add(jLabel1);
+        jLabel1.setBounds(50, 140, 90, 14);
 
         lfondo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/FondoMasc.jpg"))); // NOI18N
         lfondo.setText("     ");
@@ -361,11 +386,11 @@ private void llenarComboBoxes2() throws SQLException{
     private void cidenuncianteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cidenuncianteActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_cidenuncianteActionPerformed
-    /**
-     * Metodo encargado de registrar en la base de datos la denuncia hecha, siempre
-     * y cuando pase por los chequepos pertinentes.
-     * @param evt 
-     */
+/** 
+* Una vez recolectado todos los datos en la interfaz, y chequeados invocando al metodo chequeoDatos(),
+ * se ingresa dichos datos a la tabla denuncia de la base de datos.
+ * @param evt 
+ */
     private void insertarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_insertarActionPerformed
         boolean chequeo = chequeoDatos();
         System.out.println("..."+tipoDenuncia.getSelectedIndex());
@@ -454,6 +479,7 @@ private void llenarComboBoxes2() throws SQLException{
     private javax.swing.JFormattedTextField fecha;
     private javax.swing.JTextField idmascota;
     private javax.swing.JButton insertar;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JList<String> jList1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;

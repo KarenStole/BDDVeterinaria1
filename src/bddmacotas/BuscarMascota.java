@@ -29,6 +29,8 @@ public class BuscarMascota extends javax.swing.JFrame {
     
     /**
      * Constructor de la clase.
+     * Setea los combo boxes invocando al metodo llenarComboBoxes2
+     * Muestra en pantalla resultados de una consulta.
      */
     public BuscarMascota() throws SQLException {
         initComponents();
@@ -38,6 +40,8 @@ public class BuscarMascota extends javax.swing.JFrame {
     
     /**
      * Metodo encargado de imprimir los resultados de las consultas a la base de datos.
+     * Dichos datos son idmascota,nombre, descripcion, tipodenuncia
+     * Ademas se guardan en un array para posterior uso en VerMascota
      * @param rs 
      */
     public void imprimirResultados(ResultSet rs){
@@ -67,7 +71,8 @@ public class BuscarMascota extends javax.swing.JFrame {
  
     /**
      * Metodo encargado de llenar con informacion en el combo Box.
-     * Dicha informacion son las razas de animales dentro de la base de datos.
+     * Dicha informacion son las razas de animales dentro de la base de datos, dependiendo
+     * del tipo de animal seleccionado en el combobox de tipoanimal.
      * 
      * @param i 
      */
@@ -83,6 +88,11 @@ private void llenarComboBoxes(int i) throws SQLException{
             raza.insertItemAt((String) razas.get(e), e);
         }      
     }
+/**
+ * Metodo encargado de llenar el combobox de tipoanimal, infromacion sacada directamente
+ * de la base de datos.
+ * @throws SQLException 
+ */
 private void llenarComboBoxes2() throws SQLException{
         tipoAnimal.removeAllItems();
         ArrayList tipoanimal= new ArrayList();
@@ -95,7 +105,8 @@ private void llenarComboBoxes2() throws SQLException{
         }
     }
     /**
-     * Metodo encargado de verificar si una cedula de una persona esta registrada en el sistema
+     * Metodo encargado de verificar si una cedula de una persona esta registrada en el sistema, y ademas si
+     * es valida: No nula y numerica.
      * 
      * @return True si esta, False si no
      */
@@ -119,6 +130,12 @@ private void llenarComboBoxes2() throws SQLException{
         }
         return resultado;
     }
+/**
+ * Metodo encargado de chequear que todos los datos imgresados para la busqueda sean validos.
+ * Se chequea: Zona debe ser no nula y numerico
+ *             Se debe haber seleccionado tipoAnimal y raza.
+ * @return True si los datos son numericos, False si no.
+ */
     public boolean chequeoBusqueda(){
         boolean respuesta=true;
          if( tipoAnimal.getSelectedIndex() == (-1)){
@@ -135,6 +152,11 @@ private void llenarComboBoxes2() throws SQLException{
         }
         return respuesta;
     }
+    /**
+     * Metodo encargado de chequear sila cadena de caracter solo contiene numeros.
+     * @param cadena
+     * @return True si es solo numeros, False de lo contrario,
+     */
     public static boolean isNumeric(String cadena){
 	try {
 		Integer.parseInt(cadena);
@@ -351,10 +373,11 @@ private void llenarComboBoxes2() throws SQLException{
     private void cedulaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cedulaActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_cedulaActionPerformed
-    /**
-     * Metodo encargado de buscar una mascota si fue denunciada "encontrado", mediante el numero de cedula del dueño
-     * @param evt 
-     */
+ /**
+  * Busqueda de una mascota, mediante el ingreso de ci del dueño.
+  * En pantalla se muestran todas las denuncia echas de las mascotas del dueño, tanto de perdida como de encuentro.
+  * @param evt 
+  */
     private void bbuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bbuscarActionPerformed
         boolean chequeo = chequearCI();
         if (chequeo){
@@ -377,9 +400,10 @@ private void llenarComboBoxes2() throws SQLException{
             Logger.getLogger(BuscarMascota.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_tipoAnimalActionPerformed
-    /**
-     * Busqueda de mascota por zona y raza seleccionadas sobre las denuncias "encontradas, 
-     * se muestran los resultados en pantalla.
+   /**
+     * Metodo encargado de realizar la busqueda dada una zona, tipo animal y raza.
+     * Invoca chequeoBusqueda(), para permitir o no realizar ducha accion.
+     * Se muestra en pantalla todas las denuncias hechas con esas caracterisiticas.
      * @param evt 
      */
     private void buscarfActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buscarfActionPerformed

@@ -120,8 +120,12 @@ public class SubirImagen extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
     /**
-     * Metodo encargado de subir una imagen desde la Pc, y pasarla a bytes para luego ingresar
-     * en la base de datos relacionada con la mascota.
+     * Metodo encargado de subir una imagen desde la Pc, y guardar su ruta relativa en la base de datos,
+     * asociada al idmascota registrada. Luego de hacer esto, se hace una copia de la imagen en el archivo
+     * donde se aloja en programa de para Personas.
+     * Una vez subida la imagen, se muestra en pantalla.
+     * **Nota**
+     * Importante poner la ruta absoluta del archivo donde se encuentra el programa de persona en linea 145
      * @param evt 
      */
     private void subirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_subirActionPerformed

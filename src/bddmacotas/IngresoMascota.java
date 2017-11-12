@@ -1,3 +1,5 @@
+package bddmacotas;
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -110,7 +112,13 @@ public class IngresoMascota extends javax.swing.JFrame {
         lerrorci.setText("     ");
         lerrorvet.setText("     ");
     }
-   
+ /**
+ * Metodo encargado de llenar el ComboBox de Razas.
+ * La informacion es recolectada de la base de datos directamente, de la tabla Raza.
+ * Dependiendo de que se elija en el comboBox de tipoAnimal, se presentaran las razas disponibles en la base de datos.
+ * @param i
+ * @throws SQLException 
+ */    
     private void llenarComboBoxes(int i) throws SQLException{
         raza.removeAllItems();
         ArrayList razas= new ArrayList();
@@ -123,6 +131,11 @@ public class IngresoMascota extends javax.swing.JFrame {
             raza.insertItemAt((String) razas.get(e), e);
         }      
     }
+    /**
+ * Metodo encargado de llenar comboBox donde se presenta los ripos de animales.
+ * Dichos datos son esctraidos directamente de la tabla TipoAnimal de la base de datos.
+ * @throws SQLException 
+ */
 private void llenarComboBoxes2() throws SQLException{
         tipoAnimal.removeAllItems();
         ArrayList tipoanimal= new ArrayList();
